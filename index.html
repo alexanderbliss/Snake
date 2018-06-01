@@ -1,0 +1,154 @@
+<canvas id="gc" width="400" height="400"></canvas>
+<p id="Tex1"></p>
+<button class="button" id="cdown" type="button" onclick="move(40)" style=" background-color : #000000 ; color:#ff00ff ;   border: 2px solid black; border-radius: 10px ;  position: absolute; right: 80.5%; bottom: 21%; width: 9%; height: 9%; min-width: 9%; max-width: 9%; min-height: 9%; max-height: 9%;">↓</button>
+<button class="button" id="cleft" onclick="move(37)" style="background-color : #000000 ; color:#ff00ff ;   border: 2px solid black; border-radius: 10px ;  position: absolute; font-size: 90%; bottom: 30%; width: 9%; height: 9%; min-width: 9%; max-width: 9%; min-height: 9%; max-height: 9%; right: 89.5%;"
+    type="button">←</button>
+<button class="button" id="cright" onclick="move(39)" style="background-color : #000000 ; color:#ff00ff ;   border: 2px solid black; border-radius: 10px ;  position: absolute; font-size: 90%; width: 9%; height: 9%; bottom: 30%; min-width: 9%; max-width: 9%; min-height: 9%; max-height: 9%;  right: 71.5%;"
+    type="button">→</button>
+<button class="button" id="cup" onclick="move(38)" style="background-color : #000000 ; color:#ff00ff ;   border: 2px solid black; border-radius: 10px ;  position: absolute; font-size: 90%; right: 80.5%; width: 9%; height: 9%; min-width: 9%; max-width: 9%; min-height: 9%; max-height: 9%; bottom: 39%;"
+    type="button">↑</button>
+
+<script>
+    window.onload = function () {
+        canv = document.getElementById("gc");
+        ctx = canv.getContext("2d");
+        document.addEventListener("keydown", keyPush);
+        setInterval(game, 100);
+
+        tex = document.getElementById("Tex1");
+    }
+    px = py = 10;
+    gs = tc = 20;
+    ax = ay = 10;
+    xv = yv = 0;
+    xS = yS = 0;
+
+    trail = [];
+    tail = 5;
+    score = 0;
+    start = true;
+
+
+    function game() {
+
+        px += xS;
+        py += yS;
+        if (px < 0) {
+            px = tc - 1;
+        }
+        if (px > tc - 1) {
+            px = 0;
+        }
+        if (py < 0) {
+            py = tc - 1;
+        }
+        if (py > tc - 1) {
+            py = 0;
+        }
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canv.width, canv.height);
+
+        ctx.fillStyle = "lime";
+        for (var i = 0; i < trail.length; i++) {
+            ctx.fillRect(trail[i].x * gs, trail[i].y * gs, gs - 2, gs - 2);
+            if (trail[i].x == px && trail[i].y == py) {
+                tail = 5;
+                score = 0;
+                tex.innerHTML = "Score:" + 0;
+                if (!start) {
+                    alert("you Lose hit OK to try again.");
+                }
+            } else {
+
+                start = false;
+            }
+        }
+        trail.push({
+            x: px,
+            y: py
+        });
+        while (trail.length > tail) {
+            trail.shift();
+        }
+
+        if (ax == px && ay == py) {
+            tail++;
+            ax = Math.floor(Math.random() * tc);
+            ay = Math.floor(Math.random() * tc);
+            a = ++score;
+            tex.innerHTML = "Score:" + a.toString(10);
+        }
+        ctx.fillStyle = "red";
+        ctx.fillRect(ax * gs, ay * gs, gs - 2, gs - 2);
+    }
+
+    function keyPush(evt) {
+
+        switch (evt.keyCode) {
+
+            case 37:
+                xv = -1;
+                yv = 0;
+                break;
+            case 38:
+                xv = 0;
+                yv = -1;
+                break;
+            case 39:
+                xv = 1;
+                yv = 0;
+                break;
+            case 40:
+                xv = 0;
+                yv = 1;
+                break;
+        }
+        if (xS + xv == 0 && xv != 0) {
+            xv = xS;
+        } else {
+            xS = xv;
+
+        }
+        if (yS + yv == 0 && yv != 0) {
+            yv = yS;
+        } else {
+            yS = yv;
+
+        }
+    }
+
+    function move(key) {
+
+        switch (key) {
+
+            case 37:
+                xv = -1;
+                yv = 0;
+                break;
+            case 38:
+                xv = 0;
+                yv = -1;
+                break;
+            case 39:
+                xv = 1;
+                yv = 0;
+                break;
+            case 40:
+                xv = 0;
+                yv = 1;
+                break;
+        }
+        if (xS + xv == 0 && xv != 0) {
+            xv = xS;
+        } else {
+            xS = xv;
+
+        }
+        if (yS + yv == 0 && yv != 0) {
+            yv = yS;
+        } else {
+            yS = yv;
+
+        }
+    }
+</script>
